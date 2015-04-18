@@ -11,15 +11,15 @@ import (
 )
 
 var (
-	measurements = []string{"cpu", "packets-rx", "packets-tx", "mem", "disk", "connections"}
+	measurements = []string{"cpu", "packets_rx", "packets_tx", "mem", "disk", "connections"}
 	countries = []string{"DEU", "GBR", "FRA", "SWE", "SWZ", "JPN", "USA", "CAN", "MEX"}
 	regions = []string{"nwest", "neast", "seast", "swest"}
-	dataCenters = []string{"data-center-001", "data-center-002", "data-center-003"}
+	dataCenters = []string{"data_center_001", "data_center_002", "data_center_003"}
 	servers = []string{}
 )
 
 func init() {
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		servers = append(servers, fmt.Sprintf("server%.5d", i))
 	}
 }
@@ -61,7 +61,7 @@ func main() {
 			for _, r := range regions{
 				for _, d := range dataCenters {
 					for _, s := range servers {
-						tags := map[string]string{"country": c, "region": r, "data-center": d, "server": s}
+						tags := map[string]string{"country": c, "region": r, "data_center": d, "server": s}
 						go source(m, tags, points, stop, wg)
 						seriesCnt++
 					}
@@ -78,7 +78,7 @@ func main() {
 		batch := &client.BatchPoints{
 			Points: make([]client.Point, 0),
 			Database: "foo",
-			RetentionPolicy: "bar",
+			RetentionPolicy: "default",
 		}
 
 		for p := range points {

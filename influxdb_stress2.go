@@ -34,9 +34,9 @@ func source(name string, tags map[string]string, points chan *client.Point, stop
 			return
 		case <-time.After(1 * time.Microsecond):
 			p := &client.Point{
-				Name: name,
+				Measurement: name,
 				Tags: tags,
-				Timestamp: time.Now(),
+				Time: time.Now(),
 				Fields: map[string]interface{}{"value": value},
 			}
 			value++
@@ -50,7 +50,7 @@ func main() {
 	cfg := client.Config{URL: *u}
 	c, err := client.NewClient(cfg)
 	checkerr(err)
-	
+
 	wg := &sync.WaitGroup{}
 	points := make(chan *client.Point)
 	stop := make(chan struct{})

@@ -19,7 +19,7 @@ var (
 )
 
 func init() {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 400; i++ {
 		servers = append(servers, fmt.Sprintf("server%.5d", i))
 	}
 }
@@ -79,6 +79,7 @@ func main() {
 			Points: make([]client.Point, 0),
 			Database: "foo",
 			RetentionPolicy: "default",
+			WriteConsistency: "Any",
 		}
 
 		for p := range points {

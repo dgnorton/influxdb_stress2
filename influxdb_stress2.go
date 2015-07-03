@@ -25,7 +25,7 @@ var (
 	stressMetrics = flag.Bool("stressmetrics", true, "if enabled, influxdb_stress2 will write performance metrics")
 	database      = flag.String("database", "stress", "name of database")
 	resetDatabase = flag.Bool("resetdatabase", false, "deletes database, if it exists, and creates a new one")
-	address       = flag.String("addr", "localhost:8086", "IP address and port of database (e.g., localhost:8086")
+	address       = flag.String("addr", "localhost:8086", "IP address and port of database (e.g., localhost:8086)")
 )
 
 func init() {

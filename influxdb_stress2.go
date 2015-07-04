@@ -64,7 +64,7 @@ type responseTime struct {
 
 func newResponseTime(start, end time.Time) *responseTime {
 	return &responseTime{
-		time:     time.Now(),
+		time:     end,
 		duration: end.Sub(start),
 	}
 }
@@ -142,18 +142,20 @@ func main() {
 		end := time.Now()
 		checkerr(err)
 
-		if *batchInterval > 0 {
-			time.Sleep(*batchInterval)
-		}
-
-		responseTimes = append(responseTimes, newResponseTime(start, end))
-		if len(responseTimes) > 99 {
-			writeResponseTimes(c, responseTimes)
-			responseTimes = []*responseTime{}
+		if *stressMetrics {
+			responseTimes = append(responseTimes, newResponseTime(start, end))
+			if len(responseTimes) > 99 {
+				writeResponseTimes(c, responseTimes)
+				responseTimes = []*responseTime{}
+			}
 		}
 
 		total += len(batch.Points)
 		fmt.Printf("total points written: %d\n", total)
+
+		if *batchInterval > 0 {
+			time.Sleep(*batchInterval)
+		}
 	}
 }
 

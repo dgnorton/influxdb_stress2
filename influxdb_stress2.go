@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -26,6 +27,7 @@ var (
 	database      = flag.String("database", "stress", "name of database")
 	resetDatabase = flag.Bool("resetdatabase", false, "deletes database, if it exists, and creates a new one")
 	address       = flag.String("addr", "localhost:8086", "IP address and port of database (e.g., localhost:8086)")
+	clientid      = flag.String("clientid", "", "ID of this client. (defaults to PID)")
 )
 
 func init() {
@@ -82,6 +84,10 @@ func resetDB(c *client.Client, database string) error {
 }
 
 func main() {
+	if *clientid == "" {
+		*clientid = fmt.Sprintf("%d", os.Getpid())
+	}
+
 	u, _ := url.Parse(fmt.Sprintf("http://%s", *address))
 	cfg := client.Config{URL: *u}
 	c, err := client.NewClient(cfg)
@@ -110,7 +116,7 @@ func main() {
 			for _, r := range regions {
 				for _, d := range dataCenters {
 					for _, s := range servers {
-						tags := map[string]string{"country": c, "region": r, "data_center": d, "server": s}
+						tags := map[string]string{"country": c, "region": r, "data_center": d, "server": s, "clientid": *clientid}
 						go source(m, tags, points, stop, wg)
 						seriesCnt++
 					}
